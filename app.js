@@ -1,27 +1,29 @@
 var express = require('express');
-var app = express();
-var routes = require(__dirname+'/routes/');
 var swig = require('swig');
+swig.setDefaults({cache:false});//since we'll be refreshing our pages a lot
 var morgan = require('morgan');
-var logger = morgan('dev')
+var logger = morgan('dev');//what are you looking to log?
 //Morgan is used to console.log stuff
 
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 //body parser is used to populate req&res.body
 
-app.set('views','./views');
-app.set('view engine','html');
-app.engine('html',swig.renderFile);
-swig.setDefaults({cache:false});//since we'll be refreshing our pages a lot
+var app = express();
+
+module.exports = app;
 
 app.use(express.static('./public/'));
+app.set('view engine','html');
+app.engine('html',swig.renderFile);
+
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
 
 app.use(logger);
-app.use(routes);
+var routes = require(__dirname+'/routes/');
+app.use('/products', routes);
 
 
-app.listen(3000, function(req, res){
-});
+app.listen(process.env.PORT || 3000, function(){
+  //why have this callback function if you're not going to do anything with it
+});//set this up in server.js file instead of putting it in app.js
 

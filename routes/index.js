@@ -7,27 +7,24 @@ router.get('/',function(req, res){
 	res.render('index', {title: "Home"})
 });
 
-router.get('/products',function(req, res, next){
-	Product.find({}).exec()
-	.then(function(product){
-		res.render('products.html', {title: "Products", products:product})	
-	})
-	.catch(function(err){
-		console.log(err);
-	})
+router.get('/',function(req, res, next){
+	Product.find({})
+	.then(function(products){
+		res.render('products', {title: "Products", products:products});	
+	}, next)
 });
 
-router.post('/products',function(req, res){
+router.post('/',function(req, res, next){
 	var product = new Product({
 		name: req.body.name,
 		description: req.body.description,
 		quantity: req.body.quantity
 	});
 	product.save()
-	.catch(function(err){
-		console.log(err);
-	})
-	res.redirect('/products')
+    .then(function(){
+	    res.redirect('/products');
+    
+    }, next);
 });
 
 

@@ -17,4 +17,4 @@ var Product = mongoose.model('Product',productSchema);
 
 module.exports = {
 	Product: Product
-}
+};
