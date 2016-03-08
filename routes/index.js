@@ -3,15 +3,21 @@ var router = express.Router();
 var models = require('../models/');
 var Product = models.Product;
 
-router.get('/',function(req, res, next){
-	Product.find({}).exec()
-	.then(function(product){
-		res.render('index', {title: "Home", products:product})	
-	})
-	.then(null,next);
+router.get('/',function(req, res){
+	res.render('index', {title: "Home"})
 });
 
-router.post('/',function(req, res){
+router.get('/products',function(req, res, next){
+	Product.find({}).exec()
+	.then(function(product){
+		res.render('products.html', {title: "Products", products:product})	
+	})
+	.catch(function(err){
+		console.log(err);
+	})
+});
+
+router.post('/products',function(req, res){
 	var product = new Product({
 		name: req.body.name,
 		description: req.body.description,
@@ -21,12 +27,9 @@ router.post('/',function(req, res){
 	.catch(function(err){
 		console.log(err);
 	})
-	res.redirect('/')
+	res.redirect('/products')
 });
 
-router.get('/products',function(req, res){
-	res.render('index', {title: "Products"})
-});
 
 router.get('/products/active',function(req, res){
 	res.send('List of Active Products!');

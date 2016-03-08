@@ -14,6 +14,7 @@ app.set('view engine','html');
 app.engine('html',swig.renderFile);
 swig.setDefaults({cache:false});//since we'll be refreshing our pages a lot
 
+app.use(express.static('./public/'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
